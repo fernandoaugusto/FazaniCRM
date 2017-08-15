@@ -1,0 +1,16 @@
+version: '2'
+services:
+    fazanicrm-mongodb:
+        image: mongo:3.2.10
+        ports:
+            - "27017:27017"
+        command: mongos --configdb fazanicrm-mongodb-config
+    fazanicrm-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    fazanicrm-mongodb-config:
+        image: mongo:3.2.10
+        container_name: fazanicrm-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
